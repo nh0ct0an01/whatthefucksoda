@@ -9,6 +9,8 @@ var index = require('./routes/index');
 var user = require('./user');
 var app = express();
 
+var User = require('./Model/User');
+
 // view engine setup
 
 app.set('view engine', 'ejs');
@@ -19,9 +21,34 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+var auth = function(req, res, next) {
+    if (req.url.match(/^\/u\//)) {
+        var username = req.cookies.username;
+        var token = req.cookies.token;
+        console.log(req.cookies);
+        User.findOne({username: username}, 'token', function(err, user) {
+            if (err) {
+                res.redirect('/Login');
+                console.log(err);
+            } else if (user) {
+                if (user.token != token) {
+                    res.redirect('/Login');
+                } else {
+                    next();
+                }
+            } else {
+                res.redirect('/Login');
+            }
+        });
+    }
+    else next();
+};
+app.use(auth);
+
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/user', user);
+app.use('/', user);
 app.use('/', index);
 
 // catch 404 and forward to error handler

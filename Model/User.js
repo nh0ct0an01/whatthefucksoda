@@ -51,7 +51,9 @@ UserSchema.pre('save', function(next) {
 });
 
 UserSchema.statics.addACB = function(username, amount) {
+}
 
+UserSchema.statics.addACB = function(username, amount) {
 }
 
 module.exports = mongoose.model('User', UserSchema);
