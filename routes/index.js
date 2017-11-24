@@ -32,15 +32,6 @@ router.get('/u/Team', function(req, res, next) {
 
 router.get('/u/Settings', function(req, res, next) {
     res.render('pages/Settings');
-    /*
-  res.render('pages/Settings', User.getInfo(req.username));
-    User.getInfo(username, function(err, info) {
-        if (err) next(err);
-        else {
-            req.render('pages/Setting', info);
-        }
-    });
-    */
 });
 
 router.get('/u/Tools', function(req, res, next) {
@@ -48,7 +39,9 @@ router.get('/u/Tools', function(req, res, next) {
 });
 
 router.get('/u/Logout', function(req, res, next) {
-  res.render('pages/Logout');
+    res.cookie('username', '', { expires: new Date() });
+    res.cookie('token', '', { expires: new Date() });
+    res.redirect('/Login');
 });
 
 router.get('/Signup', function(req, res, next) {
