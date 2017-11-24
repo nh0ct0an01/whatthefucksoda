@@ -50,10 +50,10 @@ UserSchema.pre('save', function(next) {
     });
 });
 
-UserSchema.statics.addACB = function(username, amount) {
-}
-
-UserSchema.statics.addACB = function(username, amount) {
-}
+UserSchema.statics.getInfo = function(username, cb) {
+    this.model('User').findOne({username: username}, 'username fullName email countryId', function(err, user) {
+        cb(err, user);
+    });
+};
 
 module.exports = mongoose.model('User', UserSchema);

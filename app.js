@@ -35,6 +35,7 @@ var auth = function(req, res, next) {
                 if (user.token != token) {
                     res.redirect('/Login');
                 } else {
+                    req.body.username = username;
                     next();
                 }
             } else {

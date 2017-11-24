@@ -31,7 +31,9 @@ router.get('/u/Team', function(req, res, next) {
 });
 
 router.get('/u/Settings', function(req, res, next) {
-    res.render('pages/Settings');
+    User.getInfo(req.body.username, function(err, user){
+        res.render('pages/Settings', user);
+    });
 });
 
 router.get('/u/Tools', function(req, res, next) {
