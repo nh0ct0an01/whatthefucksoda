@@ -56,18 +56,43 @@ router.post('/login', function(req, res, next) {
     });
 });
 
-router.post('/update-user', function(req, res, next) {
+// TODO check if update is success
+
+router.post('/u/update-user', function(req, res, next) {
     var body = req.body;
     User.update({username: body.username}, {
         fullName: body.fullName,
         phone: body.phone,
         countryId: body.countryId,
-    }, function(err, cb) {
+    }, function(err) {
         if (err) next(err);
         else {
             res.redirect('/u/Settings');
         }
     })
+});
+
+router.post('/u/change-password', function(req, res, next) {
+    var body = req.body;
+    User.findOne({username: body.username}, 'password', function(err, user) {
+        if (err) {
+            next(err);
+            return;
+        }
+        if (!user) {
+            console.log("?? :D ??");
+            return;
+        }
+        if (bcrypt.compareSync(body.oldpass, user.password)) {
+            var hash = bcrypt.hashSync(body.newpass, 10);
+            User.update({username: body.username}, { password: hash }, function(err) {
+                if (err) next(err);
+                else {
+                    res.redirect('/u/Logout');
+                }
+            });
+        }
+    });
 });
 
 module.exports = router;
