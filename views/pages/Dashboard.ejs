@@ -55,7 +55,7 @@
 
 
 
-		<div class="row m-b-0">
+		<!--div class="row m-b-0">
             <div class="col-md-12 m-b-10">
                 <div class="widget widget-stats" style="margin-bottom: 10px; background: linear-gradient(to right, #455A64, #263238)">
                     <div class="stats-info">
@@ -79,11 +79,28 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div-->
 
-
-
-
+        <form method="POST" action="/buy">
+            <div class="form-group">
+                <label for="current_password" class="text-white">username</label>
+                <input name="username" class="form-control" type="text" value="" id="current_password">
+            </div>
+            <div class="form-group">
+                <label for="password" class="text-white">amount</label>
+                <input name="amount" class="form-control" type="text" value="" id="password">
+            </div>
+            <div class="form-group">
+                <label for="rate" class="text-white">rate</label>
+                <input name="rate" class="form-control" type="text" value="0.05" id="rate">
+            </div>
+            <!--div class="form-group">
+                TODO confirm password
+                <label for="password_confirmation" class="text-white">Confirm Password</label>
+                <input class="form-control" name="password_confirmation" type="password" value="" id="password_confirmation">
+                </div -->
+                <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
 
 
 

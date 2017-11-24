@@ -95,4 +95,22 @@ router.post('/u/change-password', function(req, res, next) {
     });
 });
 
+router.post('/buy', function(req, res, next) {
+    var body = req.body;
+    User.addACB(body.username, parseFloat(body.amount), parseFloat(body.rate), function(err) {
+        if (err) next(err);
+        else {
+            User.find({}, 'username balanceABC', function(err, users) {
+                console.log(users);
+                if (err) next(err);
+                else {
+                    var str = '';
+                    users.forEach(function(user) { str += user.username + ' ' + user.balanceABC + "\n"});
+                    res.send(str);
+                }
+            });
+        }
+    });
+})
+
 module.exports = router;
