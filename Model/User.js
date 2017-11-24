@@ -14,6 +14,7 @@ var UserSchema = new Schema({
     fullName: String,
     email: String,
     password: String,
+    phone: String,
     countryId: Number,
     level: Number,
     referers: [String],
@@ -51,7 +52,7 @@ UserSchema.pre('save', function(next) {
 });
 
 UserSchema.statics.getInfo = function(username, cb) {
-    this.model('User').findOne({username: username}, 'username fullName email countryId', function(err, user) {
+    this.model('User').findOne({username: username}, 'username fullName email countryId phone', function(err, user) {
         cb(err, user);
     });
 };

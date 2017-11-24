@@ -7,7 +7,8 @@ var bcrypt = require('bcrypt');
 
 router.post('/create-user', function(req, res, next) {
     // TODO check for duplicated username
-    // TODO check password lenght
+    // TODO check password length
+    // TODO check phone
     // TODO add new user to team
     // TODO generate random token
     var body = req.body;
@@ -23,6 +24,7 @@ router.post('/create-user', function(req, res, next) {
             password: body.password,
             email: body.email,
             fullName: body.fullName,
+            phone: body.phone,
             countryId: body.countryId,
             referers: referer,
             token: body.username,
