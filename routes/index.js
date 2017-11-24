@@ -1,7 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
+router.get('/', function(req, res, next) {
+    res.render('pages/Login')
+});
+
 router.get('/Dashboard', function(req, res, next) {
   res.render('pages/Dashboard');
 });
@@ -38,6 +41,8 @@ router.get('/Logout', function(req, res, next) {
   res.render('pages/Logout');
 });
 
-
+router.get('/Signup', function(req, res, next) {
+  res.render('pages/Signup');
+});
 
 module.exports = router;

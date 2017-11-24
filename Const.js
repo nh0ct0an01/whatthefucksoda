@@ -13,63 +13,58 @@ var Const = {
  *  Config Schema for mongodb database
  * */
 var ConstSchema = {
+    /*
+    HistorySend: {
+        id: String,
+        ToAddress: String,
+        SendDate: Date,
+        RateBTC: Double,
+    },
+    HistoryBuy: {
+        id: String,
+        FromAddress: String,
+        SendDate: Date,
+        RateBTC: Double,
+    },
+    */
     User: {
         username: String,
         fullName: String,
         email: String,
         password: String,
-        country: String,
+        countryId: Number,
         level: Number,
-        Balance_ABC: Double,
-        Balance_ETH: Double,
-        Balance_BTC: Double,
-        BTCAdress: String,
-        ETHAdress: String,
-        ABCAdress: String,
+        referers: {
+            type: [{id: String}],
+            default: [],
+        },
+        team: {
+            type: [{id: String}],
+            default: [],
+        },
+        balanceABC: Double,
+        //balanceETH: Double,
+        //balanceBTC: Double,
+        //BTCAdress: String,
+        //ETHAdress: String,
         createAt: {
             type: Date,
             default: Date.now
         },
-        Historysend: {
-            id: String,
-            ToAddress: String,
-            SendDate: Date,
-            RateABC: Double,
-        }
-        Historysend: {
-            id: String,
-            FromAddress: String,
-            SendDate: Date,
-            RateABC: Double,
-        }
-        isAdmin: {
-            type: Boolean,
-            default: false
-        },
         token: String,
         id: String
     },
-    Token: {
-        id: String,
-        userID: String,
-        token: String
-    },
-    MarkerHistory: {
-        id: String,
-        idUsersend: String,
-        idUserreceive: String,
-  },
-   
-  Admin: {
+
+    /*
+    Admin: {
         id: String,
         admin_name: String,
         admin_mail: String,
         admin_phone: String,
         admin_country: String,
-        
-
-  }
-  
+        token: String,
+    }
+    */
 };
 /*
  * Defined error code
@@ -176,9 +171,3 @@ exports.Const = new _.assign({}, Const);
 exports.ConstSchema = new _.assign({}, ConstSchema);
 exports.ErrCode = new _.assign({}, ErrCode);
 exports.SocketName = new _.assign({}, SocketName);
-
-Listpeople:Array,
-
-
-
-
