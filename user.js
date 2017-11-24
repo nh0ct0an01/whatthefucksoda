@@ -7,7 +7,8 @@ var bcrypt = require('bcrypt');
 
 router.post('/create-user', function(req, res, next) {
     // TODO check for duplicated username
-    // TODO check password length
+    // TODO check for duplicated email
+    // TODO check password length,...
     // TODO check phone
     // TODO add new user to team
     // TODO generate random token
@@ -53,6 +54,20 @@ router.post('/login', function(req, res, next) {
             res.redirect('/Login');
         }
     });
+});
+
+router.post('/update-user', function(req, res, next) {
+    var body = req.body;
+    User.update({username: body.username}, {
+        fullName: body.fullName,
+        phone: body.phone,
+        countryId: body.countryId,
+    }, function(err, cb) {
+        if (err) next(err);
+        else {
+            res.redirect('/u/Settings');
+        }
+    })
 });
 
 module.exports = router;
