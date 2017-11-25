@@ -19,12 +19,10 @@ var UserSchema = new Schema({
     countryId: Number,
     level: Number,
     referers: [String],
-    /*
     team: {
-        type: [{id: String}],
+        type: [String],
         default: [],
     },
-    */
     balanceABC: {
         type: Number, 
         default: 0,

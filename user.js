@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var User = require('./Model/User');
 var bcrypt = require('bcrypt');
+var async = require('async');
 
 // TODO refactor: move function to User model
 
@@ -20,19 +21,35 @@ router.post('/create-user', function(req, res, next) {
         else {
             referer = [body.referer].concat(user.referers);
         }
-        User.create({
-            username: body.username,
-            password: body.password,
-            email: body.email,
-            fullName: body.fullName,
-            phone: body.phone,
-            countryId: body.countryId,
-            referers: referer,
-            token: body.username,
-            level: referer.length,
-        }, function(err) {
-            if (err) next(err);
-            else res.redirect("/");
+        async.parallel([
+            function(callback) {
+                if (referer.length > 0) {
+                    User.update({username: referer[0]}, { $push: {team: body.username} }, function(err) {
+                        if (err) next(err);
+                        else callback();
+                    });
+                } else {
+                    callback();
+                }
+            },
+            function(callback) {
+                User.create({
+                    username: body.username,
+                    password: body.password,
+                    email: body.email,
+                    fullName: body.fullName,
+                    phone: body.phone,
+                    countryId: body.countryId,
+                    referers: referer,
+                    token: body.username,
+                    level: referer.length,
+                }, function(err) {
+                    if (err) next(err);
+                    else callback();
+                });
+            }
+        ], function() {
+            res.redirect("/");
         });
     });
 });
