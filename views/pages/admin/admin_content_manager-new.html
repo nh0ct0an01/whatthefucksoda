@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Admin</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+     <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+              <span>Admin</span>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <br />
+
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+  
+                <ul class="nav side-menu">
+                  <li><style:"color=red"> Glance</style>
+                    <ul class="nav child_menu">
+                      <li>At a Glance</li>
+                      <li>Search</li>
+                    </ul>
+                  </li>
+                  <li><style:"color=red">Wallet</style>
+                    <ul class="nav child_menu">
+                      <li>BTC-Wallet Request</li>
+                      <li>BTC Wallet</li>
+                      <li>BTC Wallet Report</li>
+                      <li>BTC Wallet Available</li>
+                    </ul>
+                  </li>
+                  <li><style:"color=red">Profiles
+                    <ul class="nav child_menu">
+                      <li>Show Profile</li>
+                      <li>Edit Profile</li>
+                      <li>Edit User Account</li>
+                      <li>Edit Dlr.Sponsor</li>
+                      <li>Know Login Password</li>
+                      <li>Change Login Password</li>
+                      <li>Know Transaction Password</li>
+                      <li>Change Login Password</li>
+                    </ul>
+                  </li>
+                  <li><style:"color=red">MIS Reports
+                    <ul class="nav child_menu">
+                      <li>Registration Report</li>
+                      <li>Sales Report</li>
+                    </ul>
+                  </li>
+                  <li><style:"color=red">Admin User Tools
+                    <ul class="nav child_menu">
+                      <li>My Password Change</li>
+                    </ul>
+                  </li>
+                    <li><style:"color=red">Support Center
+                    <ul class="nav child_menu">
+                      <li>Search Ticket</li>
+                      <li>Ticket</li>
+                    </ul>
+                  </li>
+                  <li><style:"color=red">Contents Manager</style>
+                    <ul class="nav child_menu">
+                      <li>News</li>
+                    </ul>
+                 </li>
+                 <li><style:"color=red">Payout Menu</style>
+                    <ul class="nav child_menu">
+                      <li>All Income Report</li>
+                    </ul>
+                 </li>
+                <li><style:"color=red">A/c Management</style>
+              </div>
+              </div>
+                
+        <!-- top navigation -->
+        <div class="top_nav">
+          <div class="nav_menu">
+            <nav>
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+              </div>
+
+              <ul class="nav navbar-nav navbar-right">
+                <li class="">
+                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    ADMIN
+                    <span class=" fa fa-angle-down"></span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-usermenu pull-right">
+                    <li><a href="javascript:;"> Profile</a></li>
+                    <li>
+                      <a href="javascript:;">
+                        <span class="badge bg-red pull-right">50%</span>
+                        <span>Settings</span>
+                      </a>
+                    </li>
+                    <li><a href="javascript:;">Help</a></li>
+                    <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                  </ul>
+                </li>
+
+                <li role="presentation" class="dropdown">
+                  <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-envelope-o"></i>
+                      <!--khuc nay la doan mau 1 cai hop thu giua cac admin-->
+                    <span class="badge bg-green">6</span>
+                  </a>
+                  <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                    <li>
+                      <a>
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a>
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a>
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a>
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <div class="text-center">
+                        <a>
+                          <strong>See All Alerts</strong>
+                          <i class="fa fa-angle-right"></i>
+                                <!--khuc nay la doan mau 1 cai hop thu giua cac admin-->
+                        </a>
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+              <!--page content of content manager-new-->
+                                        <div class="right_col" role="main">
+          <div class="">
+               <li><a href="index.html"></a></li>          //index ?? tu chen link vo sau
+              <div class="x_panel">
+                  <div class="x_title">
+                    <h2><style="color:green">News</style></h2>
+                       <div class="container cropper">
+                  <div class="row">
+                    <div class="col-md-9">
+                      <div class="img-container">
+                        <img id="image" src="images/cropper.jpg" alt="Picture">
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="docs-preview clearfix">
+                        <div class="img-preview preview-lg"></div>
+                        <div class="img-preview preview-md"></div>
+                        <div class="img-preview preview-sm"></div>
+                        <div class="img-preview preview-xs"></div>
+                      </div>
+
+                      <div class="docs-data">
+                        <div class="input-group input-group-sm">
+                          <label class="input-group-addon" for="dataX">X</label>
+                          <input type="text" class="form-control" id="dataX" placeholder="x">
+                          <span class="input-group-addon">px</span>
+                        </div>
+                        <div class="input-group input-group-sm">
+                          <label class="input-group-addon" for="dataY">Y</label>
+                          <input type="text" class="form-control" id="dataY" placeholder="y">
+                          <span class="input-group-addon">px</span>
+                        </div>
+                        <div class="input-group input-group-sm">
+                          <label class="input-group-addon" for="dataWidth">Width</label>
+                          <input type="text" class="form-control" id="dataWidth" placeholder="width">
+                          <span class="input-group-addon">px</span>
+                        </div>
+                        <div class="input-group input-group-sm">
+                          <label class="input-group-addon" for="dataHeight">Height</label>
+                          <input type="text" class="form-control" id="dataHeight" placeholder="height">
+                          <span class="input-group-addon">px</span>
+                        </div>
+                        <div class="input-group input-group-sm">
+                          <label class="input-group-addon" for="dataRotate">Rotate</label>
+                          <input type="text" class="form-control" id="dataRotate" placeholder="rotate">
+                          <span class="input-group-addon">deg</span>
+                        </div>
+                        <div class="input-group input-group-sm">
+                          <label class="input-group-addon" for="dataScaleX">ScaleX</label>
+                          <input type="text" class="form-control" id="dataScaleX" placeholder="scaleX">
+                        </div>
+                        <div class="input-group input-group-sm">
+                          <label class="input-group-addon" for="dataScaleY">ScaleY</label>
+                          <input type="text" class="form-control" id="dataScaleY" placeholder="scaleY">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-9 docs-buttons">
