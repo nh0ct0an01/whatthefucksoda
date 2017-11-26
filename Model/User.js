@@ -23,14 +23,20 @@ var UserSchema = new Schema({
         type: [String],
         default: [],
     },
-    balanceABC: {
+    balanceACB: {
         type: Number, 
         default: 0,
     },
-    balanceBTC: Number,
+    balanceBTC: {
+        type: Number,
+        default: 0,
+    },
+    balanceETH: {
+        type: Number,
+        default: 0,
+    },
     BTCAdress: String,
     BTCKey: String,
-    balanceETH: Number,
     ETHAdress: String,
     ETHKey: String,
     createAt: {
@@ -41,9 +47,11 @@ var UserSchema = new Schema({
 });
 
 UserSchema.statics.getInfo = function(username, cb) {
-    this.model('User').findOne({username: username}, 'username fullName email countryId phone', function(err, user) {
-        cb(err, user);
-    });
+    this.model('User').findOne({username: username},
+        'username fullName email countryId phone balanceACB balanceBTC balanceETH',
+        function(err, user) {
+            cb(err, user);
+        });
 };
 
 UserSchema.statics.addACB = function(username, amount, rate, callback) {

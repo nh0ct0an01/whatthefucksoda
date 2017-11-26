@@ -11,7 +11,9 @@ router.get('/Login', function(req, res, next) {
 });
 
 router.get('/u/Dashboard', function(req, res, next) {
-  res.render('pages/Dashboard');
+    User.getInfo(req.body.username, function(err, user){
+        res.render('pages/Dashboard', user);
+    });
 });
 
 router.get('/u/Exchange', function(req, res, next) {
