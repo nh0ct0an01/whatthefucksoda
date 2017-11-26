@@ -8,48 +8,67 @@ var randToken = require('rand-token');
 // TODO refactor: move function to User model
 
 router.post('/create-user', function(req, res, next) {
-    // TODO check for duplicated username
-    // TODO check for duplicated email
     // TODO check password length,...
     // TODO check phone
     var body = req.body;
-    User.findOne({username: body.referer}, "referers", function(err, user) {
-        var referer = [];
-        if (err) next(err);
-        else if (user==null) {}
-        else {
-            referer = [body.referer].concat(user.referers);
-        }
-        async.parallel([
-            function(callback) {
-                if (referer.length > 0) {
-                    User.update({username: referer[0]}, { $push: {team: body.username} }, function(err) {
-                        if (err) next(err);
-                        else callback();
-                    });
-                } else {
-                    callback();
+    async.parallel([
+        function(callback) {
+            User.findOne({username: body.username}, "usename", function(err, user) {
+                if (!err && user) callback(null, true);
+                else callback(null, false);
+            });
+        },
+        function(callback) {
+            User.findOne({email: body.email}, "email", function(err, user) {
+                if (!err && user) callback(null, true);
+                else callback(null, false);
+            });
+        },
+    ], function(err, result) {
+        if (!result[0] && !result[1]) {
+            // Create user
+            User.findOne({username: body.referer}, "referers", function(err, user) {
+                var referer = [];
+                if (err) next(err);
+                else if (user==null) {}
+                else {
+                    referer = [body.referer].concat(user.referers);
                 }
-            },
-            function(callback) {
-                User.create({
-                    username: body.username,
-                    password: bcrypt.hashSync(body.password, 10),
-                    email: body.email,
-                    fullName: body.fullName,
-                    phone: body.phone,
-                    countryId: body.countryId,
-                    referers: referer,
-                    token: randToken.generate(64),
-                    level: referer.length,
-                }, function(err) {
-                    if (err) next(err);
-                    else callback();
+                async.parallel([
+                    function(callback) {
+                        if (referer.length > 0) {
+                            User.update({username: referer[0]}, { $push: {team: body.username} }, function(err) {
+                                if (err) next(err);
+                                else callback();
+                            });
+                        } else {
+                            callback();
+                        }
+                    },
+                    function(callback) {
+                        User.create({
+                            username: body.username,
+                            password: bcrypt.hashSync(body.password, 10),
+                            email: body.email,
+                            fullName: body.fullName,
+                            phone: body.phone,
+                            countryId: body.countryId,
+                            referers: referer,
+                            token: randToken.generate(64),
+                            level: referer.length,
+                        }, function(err) {
+                            if (err) next(err);
+                            else callback();
+                        });
+                    }
+                ], function() {
+                    res.redirect("/");
                 });
-            }
-        ], function() {
-            res.redirect("/");
-        });
+            });
+        } else {
+            // existed
+            res.redirect("/Login")
+        }
     });
 });
 
