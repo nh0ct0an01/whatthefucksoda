@@ -27,27 +27,17 @@ var UserSchema = new Schema({
         type: Number, 
         default: 0,
     },
-    //balanceETH: Double,
-    //balanceBTC: Double,
-    //BTCAdress: String,
-    //ETHAdress: String,
+    balanceBTC: Number,
+    BTCAdress: String,
+    BTCKey: String,
+    balanceETH: Number,
+    ETHAdress: String,
+    ETHKey: String,
     createAt: {
         type: Date,
         default: Date.now
     },
     token: String,
-    //id: String
-});
-
-UserSchema.pre('save', function(next) {
-    var user = this;
-    bcrypt.hash(user.password, 10, function(err, hash) {
-        if (err) next(err);
-        else {
-            user.password = hash;
-            next();
-        }
-    });
 });
 
 UserSchema.statics.getInfo = function(username, cb) {
@@ -68,7 +58,6 @@ UserSchema.statics.addACB = function(username, amount, rate, callback) {
                 amount = amount * rate;
                 return res;
             });
-            console.log(addList);
             // TODO check if update is success
             async.each(addList, function(x, cb) {
                 User.update({username: x.username},

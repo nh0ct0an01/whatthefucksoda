@@ -3,6 +3,7 @@ var router = express.Router();
 var User = require('./Model/User');
 var bcrypt = require('bcrypt');
 var async = require('async');
+var randToken = require('rand-token');
 
 // TODO refactor: move function to User model
 
@@ -11,8 +12,6 @@ router.post('/create-user', function(req, res, next) {
     // TODO check for duplicated email
     // TODO check password length,...
     // TODO check phone
-    // TODO add new user to team
-    // TODO generate random token
     var body = req.body;
     User.findOne({username: body.referer}, "referers", function(err, user) {
         var referer = [];
@@ -35,13 +34,13 @@ router.post('/create-user', function(req, res, next) {
             function(callback) {
                 User.create({
                     username: body.username,
-                    password: body.password,
+                    password: bcrypt.hashSync(body.password, 10),
                     email: body.email,
                     fullName: body.fullName,
                     phone: body.phone,
                     countryId: body.countryId,
                     referers: referer,
-                    token: body.username,
+                    token: randToken.generate(64),
                     level: referer.length,
                 }, function(err) {
                     if (err) next(err);
