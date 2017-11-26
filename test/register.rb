@@ -5,7 +5,7 @@ def new_user(ref, i)
         username: "user#{i}",
         password: "password#{i}",
         email: "user#{i}@gmail.com",
-        name: "User #{i}",
+        fullName: "User #{i}",
         referer: "user#{ref}",
         countryId: 1,
         phone: "123",

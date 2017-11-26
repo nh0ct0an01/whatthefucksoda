@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var bcrypt = require('bcrypt');
 var async = require('async');
+var formatter = require('../formatter');
 
 var UserSchema = new Schema({
   username: String,
@@ -52,8 +53,10 @@ UserSchema.statics.getInfo = function(username, cb) {
   this.model('User').findOne({username: username},
     'username fullName email countryId phone balanceACB',
     function(err, user) {
-      user.balanceBTC = 0;
-      user.balanceETH = 0;
+      user = JSON.parse(JSON.stringify(user));
+      user.balanceBTC = formatter.balance(0);
+      user.balanceETH = formatter.balance(0);
+      user.balanceACB = formatter.balance(user.balanceACB);
       cb(err, user);
     }
   );
@@ -89,6 +92,11 @@ UserSchema.statics.addACB = function(username, amount, rate, callback) {
 UserSchema.statics.getTeam = function(username, callback) {
   var User = this.model('User');
   User.find({referer: username}, 'username balanceACB createAt', function(err, users) {
+    users = users.map(function(user) {
+      user = JSON.parse(JSON.stringify(user));
+      user.balanceACB = formatter.balance(user.balanceACB);
+      return user;
+    });
     callback(err, {users: users});
   });
 };
