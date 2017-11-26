@@ -31,7 +31,9 @@ router.get('/u/Transaction', function(req, res, next) {
 });
 
 router.get('/u/Team', function(req, res, next) {
-  res.render('pages/Team');
+    User.getTeam(req.body.username, function(err, users) {
+        res.render('pages/Team', users);
+    });
 });
 
 router.get('/u/Settings', function(req, res, next) {
