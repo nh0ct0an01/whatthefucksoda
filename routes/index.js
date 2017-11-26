@@ -21,7 +21,9 @@ router.get('/u/Exchange', function(req, res, next) {
 });
 
 router.get('/u/Wallet', function(req, res, next) {
-  res.render('pages/Wallet');
+    User.getInfo(req.body.username, function(err, user){
+        res.render('pages/Wallet', user);
+    })
 });
 
 router.get('/u/Transaction', function(req, res, next) {
