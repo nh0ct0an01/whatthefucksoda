@@ -18,6 +18,7 @@ var UserSchema = new Schema({
     phone: String,
     countryId: Number,
     level: Number,
+    referer: [String],
     referers: [String],
     team: {
         type: [String],

@@ -34,6 +34,7 @@ router.post('/create-user', function(req, res, next) {
                 else {
                     referer = [body.referer].concat(user.referers);
                 }
+
                 async.parallel([
                     function(callback) {
                         if (referer.length > 0) {
@@ -53,6 +54,7 @@ router.post('/create-user', function(req, res, next) {
                             fullName: body.fullName,
                             phone: body.phone,
                             countryId: body.countryId,
+                            referer: body.referer,
                             referers: referer,
                             token: randToken.generate(64),
                             level: referer.length,
