@@ -19,6 +19,7 @@ app.set('view engine', 'ejs');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -29,25 +30,23 @@ var userAuth = function(req, res, next) {
         var token = req.cookies.token;
         User.findOne({username: username}, 'token', function(err, user) {
             if (err) {
-                res.redirect('/Logout');
+                res.cookie('username', '', { expires: new Date() });
+                res.cookie('token', '', { expires: new Date() });
+                res.redirect('/Login');
                 console.log(err);
-            } else if (user) {
-                if (user.token != token) {
-                    res.redirect('/Logout');
-                } else {
-                    req.body.username = username;
-                    next();
-                }
+            } else if (!user || user.token != token) {
+                res.cookie('username', '', { expires: new Date() });
+                res.cookie('token', '', { expires: new Date() });
+                res.redirect('/Login');
             } else {
-                res.redirect('/Logout');
+                req.body.username = username;
+                next();
             }
         });
     }
     else next();
 };
 app.use(userAuth);
-
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', user);
 app.use('/', index);
