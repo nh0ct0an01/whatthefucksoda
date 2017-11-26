@@ -32,6 +32,7 @@ router.get('/u/Transaction', function(req, res, next) {
 
 router.get('/u/Team', function(req, res, next) {
   User.getTeam(req.body.username, function(err, users) {
+    users.username = req.body.username;
     res.render('pages/Team', users);
   });
 });
@@ -53,7 +54,7 @@ router.get('/u/Logout', function(req, res, next) {
 });
 
 router.get('/Signup', function(req, res, next) {
-  res.render('pages/Signup');
+  res.render('pages/Signup', {query: req.query});
 });
 
 module.exports = router;

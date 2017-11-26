@@ -45,20 +45,18 @@
                 <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
                   <span class="count_top"><i class="fa fa-user"></i>ACB</span>
                   <div class="count"><%= balanceACB %></div>
-                  <span class="count_bottom"><i class="green">4% </i> From last Week</span>
+                  <!--span class="count_bottom"><i class="green">4% </i> From last Week</span-->
                 </div>
                 <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
                   <span class="count_top"><i class="fa fa-clock-o"></i> BTC</span>
                   <div class="count"><%= balanceBTC %></div>
-                  <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span>
+                  <!--span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span-->
                 </div>
-
-
-
-
-
-
-
+                <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                  <span class="count_top"><i class="fa fa-clock-o"></i> ETH </span>
+                  <div class="count"><%= balanceETH %></div>
+                  <!--span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span-->
+                </div>
 
                 <div class="col-md-6">
 
@@ -69,14 +67,15 @@
 
                 <div class="col-md-12 m-b-10">
                   <div class="thumbnail" style="color:white; background: linear-gradient(to right, #455A64, #263238); padding-top: 25px; padding-left: 15px; padding-right: 17px; padding-bottom: 25px;">
-                    <h4 class="text-white"><strong>Withdraw BTC requests</strong></h4>
+                    <h4 class="text-white"><strong>Withdraw requests</strong></h4>
 
                     <table class="table table-bordered">
                       <thead>
                         <tr>
                           <th>Requested At</th>
                           <th>Address</th>
-                          <th>BTC</th>
+                          <th>Type</th>
+                          <th>Amount</th>
                           <th>Completed At</th>
                           <th>TXID</th>
                         </tr>
@@ -140,8 +139,8 @@
                 </div>
                 <div class="col-md-6">
                   <div class="thumbnail" id="r-hxt" style="color:white;background: linear-gradient(to right,  #455A64, #263238); padding: 25px 17px 25px 15px; height: 277px;">
-                    <h4 class="text-white"><strong>Receive Hextracoin (HXT)</strong></h4>
-                    <p class="text-white">Get address to accept Hextracoin payments</p>
+                    <h4 class="text-white"><strong>Receive Ethereum (ETH)</strong></h4>
+                    <p class="text-white">Get address to accept Ethereum payments</p>
 
                     <!-- Modal -->
                     <div class="modal fade" id="hxt-wallet" tabindex="-1" role="dialog" aria-hidden="true">
@@ -163,21 +162,21 @@
                       </div>
                     </div>
 
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#hxt-wallet">Deposit Hextracoin (HXT)</button>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#hxt-wallet">Deposit Ethereum (ETH)</button>
                     <br><br>
 
                     <table class="table table-bordered">
                       <thead>
                         <tr>
                           <th>Address</th>
-                          <th>HXT</th>
+                          <th>ETH</th>
                           <th>Confirmation</th>
                         </tr>
                       </thead>
 
                       <tbody>
                         <tr>
-                          <td colspan="3" class="bg-primary-blue">No incoming Hextracoin transaction found</td>
+                          <td colspan="3" class="bg-primary-blue">No incoming Ethereum transaction found</td>
                         </tr>
                       </tbody>
                     </table>
@@ -211,7 +210,7 @@
                 </div>
                 <div class="col-md-6">
                   <div id="s-hxt" style="color:white;background: linear-gradient(to right,  #455A64, #263238); padding: 25px 17px 25px 15px; height: 439px;">
-                    <h4 class="text-white"><strong>Send ACBcoin (HXT)</strong></h4>
+                    <h4 class="text-white"><strong>Send Ethereum (ETH)</strong></h4>
 
 
 
@@ -222,7 +221,7 @@
                         <input class="form-control" name="address" type="text" id="address">
                       </div>
                       <div class="form-group">
-                        <label for="amount" class="text-white">Amount in ACB</label>
+                        <label for="amount" class="text-white">Amount in ETH</label>
                         <input class="form-control" name="amount" type="text" id="amount">
                         &nbsp;
                       </div>
@@ -234,7 +233,7 @@
                         <label for="one_time_password" class="text-white">Enter 2FA Code</label>
                         <input class="form-control" name="one_time_password" type="text" id="one_time_password">
                       </div>
-                      <button type="submit" class="btn btn-primary">Withdraw from ACB wallet</button>
+                      <button type="submit" class="btn btn-primary">Withdraw from ETH wallet</button>
                     </form>
                   </div>
                 </div>
