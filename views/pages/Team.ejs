@@ -57,7 +57,7 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h1>Member(Gen 1)</h1>
+                    <h1>Member (Gen 1)</h1>
 
                     <div class="clearfix"></div>
                   </div>
@@ -67,15 +67,18 @@
                       <thead>
                         <tr>
                           <th>Username</th>
-                          <th>Downlines</th>
-                          <th>Country</th>
+                          <th>ACB Balance</th>
                           <th>Registered At</th>
-
                         </tr>
                       </thead>
                       <tbody>
-
-
+                        <% for (var i=0; i<users.length; i++) {%>
+                        <tr>
+                          <td><%= users[i].username %></td>
+                          <td><%= users[i].balanceACB %></td>
+                          <td><%= users[i].createAt %></td>
+                        </tr>
+                        <%}%>
                       </tbody>
                     </table>
 

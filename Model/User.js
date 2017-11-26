@@ -28,6 +28,7 @@ var UserSchema = new Schema({
     type: Number, 
     default: 0,
   },
+  /*
   BTCWallet: {
     token: String,
     name: String,
@@ -37,7 +38,6 @@ var UserSchema = new Schema({
     address: String,
     wif: String,
   },
-  /*
   ETHWallet: {
     token: String,
     name: String,
@@ -57,8 +57,10 @@ var UserSchema = new Schema({
 
 UserSchema.statics.getInfo = function(username, cb) {
   this.model('User').findOne({username: username},
-    'username fullName email countryId phone balanceACB balanceBTC balanceETH',
+    'username fullName email countryId phone balanceACB',
     function(err, user) {
+      user.balanceBTC = 0;
+      user.balanceETH = 0;
       cb(err, user);
     }
   );
@@ -77,9 +79,10 @@ UserSchema.statics.addACB = function(username, amount, rate, callback) {
         return res;
       });
       // TODO check if update is success
+      // TODO only update if amount > 0
       async.each(addList, function(x, cb) {
         User.update({username: x.username},
-          {$inc: {balanceABC: x.amount}}, function(err) {
+          {$inc: {balanceACB: x.amount}}, function(err) {
             if (err) cb(err);
             else cb();
           });
@@ -87,12 +90,14 @@ UserSchema.statics.addACB = function(username, amount, rate, callback) {
         callback(err);
       });
     }
-  })
+  });
 };
 
 UserSchema.statics.getTeam = function(username, callback) {
   var User = this.model('User');
-  User.findOne({referer: username}, 'username ')
-}
+  User.find({referer: username}, 'username balanceACB createAt', function(err, users) {
+    callback(err, {users: users});
+  });
+};
 
 module.exports = mongoose.model('User', UserSchema);

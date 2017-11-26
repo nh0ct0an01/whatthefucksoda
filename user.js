@@ -5,50 +5,6 @@ var bcrypt = require('bcrypt');
 var async = require('async');
 var randToken = require('rand-token');
 
-var bcypher = require('blockcypher');
-
-
-var getBalParam = {
-  unspentOnly: 1,
-  includeScript:1,
-  includeConfidence: 1,
-  before : 1,
-  after: 1,
-  limit: 1,
-  confirmations:1,
-  confidence : 1,
-  omitWalletAddresses:1,
-};
-
-function CreateBTCWallet(name, callback) {
-  var bcapi = new bcypher('btc','main','d1033f8d51664cd2a1d7e3735cf07f8c');
-  var data = {
-    token: 'd1033f8d51664cd2a1d7e3735cf07f8c',
-    name: name,
-    address: null,
-  };
-  bcapi.createWallet(data, function(err, res) {
-    if (err) return callback(err);
-    if (res.error) return callback(res.error);
-    bcapi.genAddrWallet(data.name, callback);
-  });
-};
-
-/*
-function CreateETHWallet (name, callback) {
-  var ethcapi = new bcypher('eth','main','d1033f8d51664cd2a1d7e3735cf07f8c');
-  var data = {
-    token: 'd1033f8d51664cd2a1d7e3735cf07f8c',
-    name: name,
-    address: null,
-  };
-  ethcapi.createWallet(data, function(err, res) {
-    if (err) return callback(err);
-    ethcapi.genAddrWallet(data.name, callback);
-  });
-};
-*/
-
 // TODO refactor: move function to User model
 
 router.post('/create-user', function(req, res, next) {
@@ -91,28 +47,21 @@ router.post('/create-user', function(req, res, next) {
             }
           },
           function(callback) {
-            async.parallel([
-              (callback) => CreateBTCWallet(body.username, callback),
-              //(callback) => CreateETHWallet(body.username, callback),
-            ], function(err, res) {
-              if (err) return callback(err);
-              User.create({
-                username: body.username,
-                password: bcrypt.hashSync(body.password, 10),
-                email: body.email,
-                fullName: body.fullName,
-                phone: body.phone,
-                countryId: body.countryId,
-                referer: body.referer,
-                referers: referer,
-                token: randToken.generate(64),
-                level: referer.length,
-                BTCWallet: res[0],
-                //ETHWallet: res[1],
-              }, function(err) {
-                if (err) next(err);
-                else callback();
-              });
+            if (err) return callback(err);
+            User.create({
+              username: body.username,
+              password: bcrypt.hashSync(body.password, 10),
+              email: body.email,
+              fullName: body.fullName,
+              phone: body.phone,
+              countryId: body.countryId,
+              referer: body.referer,
+              referers: referer,
+              token: randToken.generate(64),
+              level: referer.length,
+            }, function(err) {
+              if (err) next(err);
+              else callback();
             });
           }
         ], function() {
@@ -189,17 +138,16 @@ router.post('/buy', function(req, res, next) {
   User.addACB(body.username, parseFloat(body.amount), parseFloat(body.rate), function(err) {
     if (err) next(err);
     else {
-      User.find({}, 'username balanceABC', function(err, users) {
-        console.log(users);
+      User.find({}, 'username balanceACB', function(err, users) {
         if (err) next(err);
         else {
           var str = '';
-          users.forEach(function(user) { str += user.username + ' ' + user.balanceABC + "\n"});
+          users.forEach(function(user) { str += user.username + ' ' + user.balanceACB + "\n"});
           res.send(str);
         }
       });
     }
   });
-})
+});
 
 module.exports = router;
