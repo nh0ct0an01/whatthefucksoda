@@ -3,13 +3,6 @@ var Schema = mongoose.Schema;
 var bcrypt = require('bcrypt');
 var async = require('async');
 
-mongoose.Promise = global.Promise;
-mongoose.connection.on('disconnected', () => { console.log('-> lost connection'); throw 0; });
-mongoose.connection.on('reconnect', () => { console.log('-> reconnected'); });
-mongoose.connection.on('connected', () => { console.log('-> connected'); });
-mongoose.connect('mongodb://127.0.0.1:27017/db', {useMongoClient: true});
-mongoose.set('debug', true);
-
 var UserSchema = new Schema({
   username: String,
   fullName: String,

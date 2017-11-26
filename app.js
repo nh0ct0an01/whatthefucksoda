@@ -9,6 +9,15 @@ var admin = require('./routes/admin');
 var user = require('./user');
 var app = express();
 
+var mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
+mongoose.connection.on('disconnected', () => { console.log('-> lost connection'); throw 0; });
+mongoose.connection.on('reconnect', () => { console.log('-> reconnected'); });
+mongoose.connection.on('connected', () => { console.log('-> connected'); });
+mongoose.connect('mongodb://127.0.0.1:27017/db', {useMongoClient: true});
+mongoose.set('debug', true);
+
+
 var User = require('./Model/User');
 
 // view engine setup
