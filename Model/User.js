@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var bcypher = require('blockcypher');
 var bcrypt = require('bcrypt');
 var async = require('async');
 var formatter = require('../formatter');
@@ -26,16 +27,16 @@ var UserSchema = new Schema({
     token: String,
     name: String,
     addresses: [String],
-    private: String,
-    public: String,
     address: String,
     wif: String,
+    private: String,
+    public: String,
   },
   ETHAddr: {
     token: String,
+    address: String,
     private: String,
     public: String,
-    address: String,
   },
   createAt: {
     type: Date,
@@ -44,15 +45,46 @@ var UserSchema = new Schema({
   token: String,
 });
 
+ 
+var getBalParam = {
+  unspentOnly: 1,
+  includeScript:1,
+  includeConfidence: 1,
+  before : 1,
+  after: 1,
+  limit: 1,
+  confirmations:1,
+  confidence : 1,
+  omitWalletAddresses:1,
+};
+
 UserSchema.statics.getInfo = function(username, cb) {
-  this.model('User').findOne({username: username},
-    'username fullName email countryId phone balanceACB',
+  var User = this.model('User');
+  User.findOne({username: username},
+    "BTCWallet ETHAddr",
     function(err, user) {
-      user = JSON.parse(JSON.stringify(user));
-      user.balanceBTC = formatter.balance(0);
-      user.balanceETH = formatter.balance(0);
-      user.balanceACB = formatter.balance(user.balanceACB);
-      cb(err, user);
+      async.parallel([
+        function(callback) {
+          var api = new bcypher('btc','main','d1033f8d51664cd2a1d7e3735cf07f8c');
+          api.getAddrBal(user.BTCWallet.address, getBalParam, callback);
+        },
+        function(callback) {
+          var api = new bcypher('eth','main','d1033f8d51664cd2a1d7e3735cf07f8c');
+          api.getAddrBal(user.ETHAddr.address, getBalParam, callback);
+        },
+      ], function(err, res) {
+        if (err) return cb(err);
+        User.findOne({username: username},
+          'username fullName email countryId phone balanceACB',
+          function(err, user) {
+            user = JSON.parse(JSON.stringify(user));
+            user.balanceACB = formatter.balance(user.balanceACB);
+            user.balanceBTC = formatter.balance(res[0].balance);
+            user.balanceETH = formatter.balance(res[1].balance);
+            cb(err, user);
+          }
+        );
+      });
     }
   );
 };
