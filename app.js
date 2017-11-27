@@ -5,8 +5,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
-var admin = require('./routes/admin');
+var adminPages = require('./routes/admin');
 var user = require('./user');
+var admin = require('./admin');
 var app = express();
 
 var mongoose = require('mongoose');
@@ -17,8 +18,8 @@ mongoose.connection.on('connected', () => { console.log('-> connected'); });
 mongoose.connect('mongodb://127.0.0.1:27017/db', {useMongoClient: true});
 mongoose.set('debug', true);
 
-
 var User = require('./Model/User');
+var Admin = require('./Model/Admin');
 
 // view engine setup
 
@@ -55,6 +56,31 @@ app.use(userAuth);
 
 app.use('/', user);
 app.use('/', index);
+
+var adminAuth = function(req, res, next) {
+  if (req.url.match(/^\/admin\/a\//)) {
+    var name = req.cookies.name;
+    var token = req.cookies.token;
+    Admin.findOne({name: name}, 'token', function(err, admin) {
+      if (err) {
+        res.cookie('name', '', { expires: new Date() });
+        res.cookie('token', '', { expires: new Date() });
+        res.redirect('/admin');
+        console.log(err);
+      } else if (!user || user.token != token) {
+        res.cookie('username', '', { expires: new Date() });
+        res.cookie('token', '', { expires: new Date() });
+        res.redirect('/Login');
+      } else {
+        req.body.username = username;
+        next();
+      }
+    });
+  }
+  else next();
+};
+app.use(adminAuth);
+app.use('/admin', adminPages);
 app.use('/admin', admin);
 
 // catch 404 and forward to error handler
