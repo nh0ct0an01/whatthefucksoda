@@ -83,9 +83,8 @@ router.post('/login', function(req, res, next) {
       res.redirect('/Login');
     }
     else if (bcrypt.compareSync(body.password, user.password)) {
-      // TODO exprire day
-      res.cookie('username', body.username);
-      res.cookie('token', user.token);
+      res.cookie('username', body.username, {maxAge: 172800000, httpOnly: true});
+      res.cookie('token', user.token, {maxAge: 172800000, httpOnly: true});
       res.redirect('/u/Dashboard');
     }
     else {
