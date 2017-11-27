@@ -11,10 +11,10 @@ router.post("/create-admin", function(req, res, next) {
     name: body.name,
     password: bcrypt.hashSync(body.password, 10),
     token: randToken.generate(128),
-  }, function(err, res) {
+  }, function(err) {
     if (err) next(err);
     else {
-      res.redirect('/admin');
+      res.redirect('/admin/');
     }
   });
 });
@@ -23,12 +23,12 @@ router.post("/login", function(req, res, next) {
   var body = req.body;
   Admin.findOne({name: body.name}, "password token", function(err, admin) {
     if (err) next(err);
-    else if (user==null) {
+    else if (admin==null) {
       res.redirect('/admin/Login');
     }
-    else if (bcrypt.compareSync(body.password, user.password)) {
+    else if (bcrypt.compareSync(body.password, admin.password)) {
       res.cookie('name', body.name, {path: '/admin', maxAge: 172800000, httpOnly: true});
-      res.cookie('token', user.token, {path: '/admin', maxAge: 172800000, httpOnly: true});
+      res.cookie('token', admin.token, {path: '/admin', maxAge: 172800000, httpOnly: true});
       res.redirect('/admin/a/Dashboard');
     }
     else {

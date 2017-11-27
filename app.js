@@ -65,14 +65,14 @@ var adminAuth = function(req, res, next) {
       if (err) {
         res.cookie('name', '', { expires: new Date() });
         res.cookie('token', '', { expires: new Date() });
-        res.redirect('/admin');
+        res.redirect('/');
         console.log(err);
-      } else if (!user || user.token != token) {
-        res.cookie('username', '', { expires: new Date() });
+      } else if (!admin || admin.token != token) {
+        res.cookie('name', '', { expires: new Date() });
         res.cookie('token', '', { expires: new Date() });
-        res.redirect('/Login');
+        res.redirect('/admin/Login');
       } else {
-        req.body.username = username;
+        req.body.name = name;
         next();
       }
     });

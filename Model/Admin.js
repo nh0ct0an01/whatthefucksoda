@@ -4,7 +4,7 @@ var bcrypt = require('bcrypt');
 var async = require('async');
 
 var AdminSchema = new Schema({
-  admin: String,
+  name: String,
   password: String,
   createAt: {
     type: Date,
@@ -29,3 +29,5 @@ ETHAddrs: new Schema({
   public: String,
   address: String,
 });
+
+module.exports = mongoose.model('Admin', AdminSchema);
