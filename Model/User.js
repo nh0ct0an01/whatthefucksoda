@@ -75,7 +75,7 @@ UserSchema.statics.getInfo = function(username, cb) {
       ], function(err, res) {
         if (err) return cb(err);
         User.findOne({username: username},
-          'username fullName email countryId phone balanceACB',
+          'username fullName email countryId phone balanceACB BTCWallet ETHAddr',
           function(err, user) {
             user = JSON.parse(JSON.stringify(user));
             user.balanceACB = formatter.balance(user.balanceACB);
@@ -104,11 +104,15 @@ UserSchema.statics.addACB = function(username, amount, rate, callback) {
       // TODO check if update is success
       // TODO only update if amount > 0
       async.each(addList, function(x, cb) {
-        User.update({username: x.username},
-          {$inc: {balanceACB: x.amount}}, function(err) {
-            if (err) cb(err);
-            else cb();
-          });
+        if (x.amount > 0) {
+          User.update({username: x.username},
+            {$inc: {balanceACB: x.amount}}, function(err) {
+              if (err) cb(err);
+              else cb();
+            });
+        } else {
+          cb();
+        }
       }, function(err) {
         callback(err);
       });
@@ -118,7 +122,7 @@ UserSchema.statics.addACB = function(username, amount, rate, callback) {
 
 UserSchema.statics.getTeam = function(username, callback) {
   var User = this.model('User');
-  User.find({referer: username}, 'username balanceACB createAt', function(err, users) {
+  User.find({referer: username}, 'username balanceACB createAt level', function(err, users) {
     users = users.map(function(user) {
       user = JSON.parse(JSON.stringify(user));
       user.balanceACB = formatter.balance(user.balanceACB);

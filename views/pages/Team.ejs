@@ -63,6 +63,7 @@
                       <thead>
                         <tr>
                           <th>Username</th>
+                          <th>Level</th>
                           <th>ACB Balance</th>
                           <th>Registered At</th>
                         </tr>
@@ -71,6 +72,7 @@
                         <% for (var i=0; i<users.length; i++) {%>
                         <tr>
                           <td><%= users[i].username %></td>
+                          <td><%= users[i].level %></td>
                           <td><%= users[i].balanceACB %></td>
                           <td><%= users[i].createAt %></td>
                         </tr>

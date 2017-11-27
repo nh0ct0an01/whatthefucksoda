@@ -5,6 +5,10 @@ var bcrypt = require('bcrypt');
 var async = require('async');
 var randToken = require('rand-token');
 var bcypher = require('blockcypher');
+var bitcoin = require("bitcoinjs-lib");
+var bigi    = require("bigi");
+var buffer  = require('buffer');
+
 
 function CreateBTCWallet(name, callback) {
   var bcapi = new bcypher('btc','main','d1033f8d51664cd2a1d7e3735cf07f8c');
@@ -190,6 +194,45 @@ router.post('/buy', function(req, res, next) {
       });
     }
   });
+});
+
+var send = function(input, output, value, callback) {
+  var bcapi = new bcypher('btc','main','d1033f8d51664cd2a1d7e3735cf07f8c');
+  var keys  = new bitcoin.ECPair(bigi.fromHex('c3a5807e27a70c87a61f1ebba43f6b93fd82e5a0ba45311dfef9d050b28b7af3'));
+  var tx = {
+    inputs: [{addresses: ['input']}],
+    outputs: [{addresses: ['output'], value: value}]
+  };
+  bcapi.newTX(tx, function(err, data) {
+    if (err) {
+      callback(err);
+    } else {
+      data = JSON.parse(data);
+      console.log(data);
+      if (data.error !== null) return callback(data.error);
+      tmptx= data;
+      tmptx.pubkeys = [];
+      tmptx.signatures = tmptx.tosign.map(function(tosign, n) {
+        tmptx.pubkeys.push(keys.getPublicKeyBuffer().toString("hex"));
+        return keys.sign(new buffer.Buffer(tosign, "hex")).toDER().toString("hex");
+      });
+      bcapi.sendTX(tmptx, callback);
+    }
+  });
+}
+
+router.post('/u/send-btc', function(req, res, next) {
+  var body = req.body;
+  User.findOne({username: body.username}, "BTCWallet password", function(err, user) {
+    if (bcrypt.compareSync(body.password, user.password)) {
+      send(user.BTCWallet.address, body.to, body.amount, function(err, data) {
+        console.log(err, res);
+        res.redirect('/u/Wallet');
+      });
+    } else {
+        res.redirect('/u/Wallet');
+    }
+  })
 });
 
 module.exports = router;
