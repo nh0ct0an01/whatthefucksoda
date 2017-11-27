@@ -16,16 +16,6 @@ function CreateBTCWallet(name, callback) {
   });
 };
 
-CreateBTCWallet("test0", function(err, res) {
-    console.log(err);
-    console.log(res);
-});
-
-CreateBTCWallet("test1", function(err, res) {
-    console.log(err);
-    console.log(res);
-});
-
 /*
 { token: 'd1033f8d51664cd2a1d7e3735cf07f8c',
       name: 'test0',
