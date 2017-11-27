@@ -22,7 +22,6 @@ var UserSchema = new Schema({
     type: Number, 
     default: 0,
   },
-  /*
   BTCWallet: {
     token: String,
     name: String,
@@ -32,16 +31,12 @@ var UserSchema = new Schema({
     address: String,
     wif: String,
   },
-  ETHWallet: {
+  ETHAddr: {
     token: String,
-    name: String,
-    addresses: [String],
     private: String,
     public: String,
     address: String,
-    wif: String,
   },
-  */
   createAt: {
     type: Date,
     default: Date.now

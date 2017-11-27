@@ -4,6 +4,31 @@ var User = require('./Model/User');
 var bcrypt = require('bcrypt');
 var async = require('async');
 var randToken = require('rand-token');
+var bcypher = require('blockcypher');
+
+function CreateBTCWallet(name, callback) {
+  var bcapi = new bcypher('btc','main','d1033f8d51664cd2a1d7e3735cf07f8c');
+  var data = {
+    token: 'd1033f8d51664cd2a1d7e3735cf07f8c',
+    name: name,
+    address: null,
+  };
+  bcapi.createWallet(data, function(err, res) {
+    if (err) return callback(err);
+    if (res.error) return callback(res.error);
+    bcapi.genAddrWallet(data.name, callback);
+  });
+};
+
+function CreateETHAddr(name, callback) {
+  var ethapi = new bcypher('eth','main','d1033f8d51664cd2a1d7e3735cf07f8c');
+  var data = {
+    token: 'd1033f8d51664cd2a1d7e3735cf07f8c',
+    name: name,
+    address: null,
+  };
+  ethapi.genAddr(data, callback);
+};
 
 // TODO refactor: move function to User model
 
@@ -48,20 +73,38 @@ router.post('/create-user', function(req, res, next) {
           },
           function(callback) {
             if (err) return callback(err);
-            User.create({
-              username: body.username,
-              password: bcrypt.hashSync(body.password, 10),
-              email: body.email,
-              fullName: body.fullName,
-              phone: body.phone,
-              countryId: body.countryId,
-              referer: body.referer,
-              referers: referer,
-              token: randToken.generate(64),
-              level: referer.length,
-            }, function(err) {
+            async.parallel([
+              function(callback) {
+                CreateBTCWallet(body.username, callback);
+              },
+              function(callback) {
+                CreateETHAddr(body.username, function(err, res) {
+                  if (err) callback(err);
+                  else {
+                    res.token = "d1033f8d51664cd2a1d7e3735cf07f8c";
+                    callback(null, res);
+                  }
+                });
+              },
+            ], function(err, res) {
               if (err) next(err);
-              else callback();
+              User.create({
+                username: body.username,
+                password: bcrypt.hashSync(body.password, 10),
+                email: body.email,
+                fullName: body.fullName,
+                phone: body.phone,
+                countryId: body.countryId,
+                referer: body.referer,
+                referers: referer,
+                token: randToken.generate(64),
+                level: referer.length,
+                BTCWallet: res[0],
+                ETHAddr: res[1],
+              }, function(err) {
+                if (err) next(err);
+                else callback();
+              });
             });
           }
         ], function() {
