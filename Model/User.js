@@ -95,6 +95,7 @@ UserSchema.statics.getTeam = function(username, callback) {
     users = users.map(function(user) {
       user = JSON.parse(JSON.stringify(user));
       user.balanceACB = formatter.balance(user.balanceACB);
+      user.createAt = formatter.date(user.createAt);
       return user;
     });
     callback(err, {users: users});
