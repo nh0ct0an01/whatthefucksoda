@@ -210,8 +210,8 @@ router.post('/u/send-btc', function(req, res, next) {
   User.findOne({username: body.username}, "password", function(err, user) {
     if (bcrypt.compareSync(body.password, user.password)) {
       User.getBalance(body.username, function(err, bal) {
-        // TODO alert not enough balance
         if (bal.balanceBTC < body.amount) {
+          // TODO alert not enough balance
         } else {
           // TODO check for error
           SendReqSchema.create({username: body.username, amount: body.amount, type: "BTC"}, function() {});

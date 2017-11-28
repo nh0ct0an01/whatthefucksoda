@@ -85,11 +85,11 @@
               <div class="row tile_count">
                 <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
                   <span class="count_top"><i class="fa fa-user"></i> ACB</span>
-                  <div class="count"></div>
+                  <div class="count"><%= balanceACB %></div>
                 </div>
                 <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
                   <span class="count_top"><i class="fa fa-clock-o"></i> BTC</span>
-                  <div class="count"></div>
+                  <div class="count"><%= balanceBTC %></div>
                 </div>
 
               </div>
@@ -108,13 +108,13 @@
 
                     <div class="tab-content" style="margin-bottom: 0; padding-bottom: 0;">
                       <div class="tab-pane active in" id="create-buy-order-btc">
-                        <form method="POST" action="https://hextracoin.co/exchange" accept-charset="UTF-8" id="form-B" class="form-horizontal"><input name="_token" type="hidden" value="CxUkabXwfKHUbaZs4x4gotYoCR4WdqhJDO6PYsq6">
+                        <form method="POST" action="/u/buy" accept-charset="UTF-8" id="form-B" class="form-horizontal">
                           <div class="form-group">
                             <label for="" class="col-md-3 control-label text-white">Available balance: </label>
                             <div class="col-md-8">
                               <p class="form-control-static" style="padding-top: 6px;">
                               <span style="font-size: 125%;" class="text-white">
-                                0.00000000 BTC
+                                <%= balanceBTC %> BTC
                               </span>
                               </p>
                             </div>
@@ -124,8 +124,10 @@
                             <label for="B-offer_quantity" class="col-md-3 control-label text-white">BTC you spend: </label>
                             <div class="col-md-8">
                               <div class="input-group">
-                                <input class="form-control offer-quantity" name="B-offer_quantity" type="text" id="B-offer_quantity">
-                                <span class="input-group-addon" id="basic-addon1">USD <span id="buy-usd">0.00</span></span>
+                                <select name="packet" class="form-control">
+                                  <option value="">100ACB</option>
+                                  <option value="">200ACB</option>
+                                </select>
                               </div>
                             </div>
                           </div>
@@ -135,16 +137,16 @@
                           <div class="form-group">
                             <label for="B-price" class="col-md-3 control-label text-white">Price per ACB: </label>
                             <div class="col-md-8">
-                              <input style="font-size: 1.5em;" class="form-control price" name="B-price" type="text" value="0.00486899" id="B-price">
+                              <input style="font-size: 1.5em;" class="form-control price" type="text" value="0.00486899" id="B-price">
                             </div>
                           </div>
 
-                          <div class="form-group">
+                          <!--div class="form-group">
                             <label for="B-want_quantity" class="col-md-3 control-label text-white">ACB you receive: </label>
                             <div class="col-md-8">
-                              <input class="form-control want-quantity" name="B-want_quantity" type="text" id="B-want_quantity">
+                              <input class="form-control want-quantity" type="text" id="B-want_quantity">
                             </div>
-                          </div>
+                          </div-->
 
                           <div class="form-group">
                             <div class="col-md-3" style="text-align: right; height: 34px;">
@@ -153,7 +155,7 @@
                             <div class="col-md-8">
                               <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-qrcode fa-lg"></i></span>
-                                <input class="form-control" placeholder="Password" name="one_time_password" type="text">
+                                <input class="form-control" placeholder="Password" name="password" type="text">
                               </div>
                             </div>
                           </div>

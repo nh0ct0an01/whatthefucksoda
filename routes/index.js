@@ -17,7 +17,9 @@ router.get('/u/Dashboard', function(req, res, next) {
 });
 
 router.get('/u/Exchange', function(req, res, next) {
-  res.render('pages/Exchange');
+  User.getInfo(req.body.username, function(err, user){
+    res.render('pages/Exchange', user);
+  })
 });
 
 router.get('/u/Wallet', function(req, res, next) {
