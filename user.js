@@ -162,17 +162,21 @@ router.post('/u/change-password', function(req, res, next) {
 
 router.post('/u/buy', function(req, res, next) {
   var body = req.body;
-  User.addACB(body.username, parseFloat(body.amount), parseFloat(body.rate), function(err) {
-    if (err) next(err);
-    else {
-      User.find({}, 'username balanceACB', function(err, users) {
+  body.amount = 100 * 1000; // ACB -> shatoshi
+  User.findOne({username: body.username}, "password", function(err, user) {
+    if (err) {
+      next(err);
+      return;
+    }
+    if (bcrypt.compareSync(body.password, user.password)) {
+      User.getBalance(body.username, function(err, bal) {
         if (err) next(err);
-        else {
-          var str = '';
-          users.forEach(function(user) { str += user.username + ' ' + user.balanceACB + "\n"});
-          res.send(str);
+        else if (bal.balanceBTC >= body.amount) {
+          User.update({username: username}, {$inc: {UsedBTC: body.amount}}, function() {})
+          User.addACB(body.username, parseFloat(body.amount), parseFloat(body.rate), function() {});
         }
       });
+      res.redirect('/u/Exchange');
     }
   });
 });
