@@ -23,6 +23,14 @@ var UserSchema = new Schema({
     type: Number, 
     default: 0,
   },
+  UsedBTC: {
+    type: Number,
+    default: 0,
+  },
+  UsedETH: {
+    type: Number,
+    default: 0,
+  },
   BTCWallet: {
     token: String,
     name: String,
@@ -44,7 +52,6 @@ var UserSchema = new Schema({
   },
   token: String,
 });
-
  
 var getBalParam = {
   unspentOnly: 1,
@@ -56,37 +63,6 @@ var getBalParam = {
   confirmations:1,
   confidence : 1,
   omitWalletAddresses:1,
-};
-
-UserSchema.statics.getInfo = function(username, cb) {
-  var User = this.model('User');
-  User.findOne({username: username},
-    "BTCWallet ETHAddr",
-    function(err, user) {
-      async.parallel([
-        function(callback) {
-          var api = new bcypher('btc','main','d1033f8d51664cd2a1d7e3735cf07f8c');
-          api.getAddrBal(user.BTCWallet.address, getBalParam, callback);
-        },
-        function(callback) {
-          var api = new bcypher('eth','main','d1033f8d51664cd2a1d7e3735cf07f8c');
-          api.getAddrBal(user.ETHAddr.address, getBalParam, callback);
-        },
-      ], function(err, res) {
-        if (err) return cb(err);
-        User.findOne({username: username},
-          'username fullName email countryId phone balanceACB BTCWallet ETHAddr',
-          function(err, user) {
-            user = JSON.parse(JSON.stringify(user));
-            user.balanceACB = formatter.balance(user.balanceACB);
-            user.balanceBTC = formatter.balance(res[0].balance);
-            user.balanceETH = formatter.balance(res[1].balance);
-            cb(err, user);
-          }
-        );
-      });
-    }
-  );
 };
 
 UserSchema.statics.addACB = function(username, amount, rate, callback) {
@@ -131,6 +107,52 @@ UserSchema.statics.getTeam = function(username, callback) {
     });
     callback(err, {users: users});
   });
+};
+
+UserSchema.statics.getBalance = function(username, callback) {
+  var User = this.model('User');
+  User.findOne({username: username}, "UsedBTC UsedETH BTCWallet ETHAddr", function(err, user) {
+    async.parallel([
+      function(callback) {
+        var api = new bcypher('btc','main','d1033f8d51664cd2a1d7e3735cf07f8c');
+        api.getAddrBal(user.BTCWallet.address, getBalParam, callback);
+      },
+      function(callback) {
+        var api = new bcypher('eth','main','d1033f8d51664cd2a1d7e3735cf07f8c');
+        api.getAddrBal(user.ETHAddr.address, getBalParam, callback);
+      },
+    ], function(err, res) {
+      if (err) callback(err);
+      else callback(null, {
+        balanceBTC: res[0].balance - user.UsedBTC,
+        balanceETH: res[1].balance - user.UsedETH,
+      });
+    });
+  });
+};
+
+UserSchema.statics.getInfo = function(username, callback) {
+  var User = this.model('User');
+  async.parallel([
+    function(callback) {
+      User.findOne({username: username},
+        'username fullName email countryId phone balanceACB BTCWallet ETHAddr',
+        callback,
+      );
+    },
+    function(callback) {
+      User.getBalance(username, callback);
+    }
+  ], function(err, res) {
+    if (err) callback(err);
+    else {
+      var user = JSON.parse(JSON.stringify(res[0]));
+      user.balanceACB = formatter.balance(user.balanceACB);
+      user.balanceBTC = formatter.balance(res[1].balanceBTC);
+      user.balanceETH = formatter.balance(res[1].balanceETH);
+      callback(null, user);
+    }
+  })
 };
 
 module.exports = mongoose.model('User', UserSchema);
