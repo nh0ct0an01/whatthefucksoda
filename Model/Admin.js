@@ -23,11 +23,4 @@ var BTCWallet = new Schema({
   wif: String,
 });
 
-ETHAddrs: new Schema({
-  token: String,
-  private: String,
-  public: String,
-  address: String,
-});
-
 module.exports = mongoose.model('Admin', AdminSchema);

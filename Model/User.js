@@ -27,22 +27,12 @@ var UserSchema = new Schema({
     type: Number,
     default: 0,
   },
-  UsedETH: {
-    type: Number,
-    default: 0,
-  },
   BTCWallet: {
     token: String,
     name: String,
     addresses: [String],
     address: String,
     wif: String,
-    private: String,
-    public: String,
-  },
-  ETHAddr: {
-    token: String,
-    address: String,
     private: String,
     public: String,
   },
@@ -110,22 +100,11 @@ UserSchema.statics.getTeam = function(username, callback) {
 
 UserSchema.statics.getBalance = function(username, callback) {
   var User = this.model('User');
-  User.findOne({username: username}, "UsedBTC UsedETH BTCWallet ETHAddr", function(err, user) {
-    async.parallel([
-      function(callback) {
-        var api = new bcypher('btc','main','d1033f8d51664cd2a1d7e3735cf07f8c');
-        api.getAddrBal(user.BTCWallet.address, getBalParam, callback);
-      },
-      function(callback) {
-        var api = new bcypher('eth','main','d1033f8d51664cd2a1d7e3735cf07f8c');
-        api.getAddrBal(user.ETHAddr.address, getBalParam, callback);
-      },
-    ], function(err, res) {
+  User.findOne({username: username}, "UsedBTC BTCWallet", function(err, user) {
+    var api = new bcypher('btc','main','d1033f8d51664cd2a1d7e3735cf07f8c');
+    api.getAddrBal(user.BTCWallet.address, getBalParam, function(err, bal) {
       if (err) callback(err);
-      else callback(null, {
-        balanceBTC: res[0].balance - user.UsedBTC,
-        balanceETH: res[1].balance - user.UsedETH,
-      });
+      else callback(null, {balanceBTC: bal.balance - user.UsedBTC});
     });
   });
 };
@@ -135,7 +114,7 @@ UserSchema.statics.getInfo = function(username, callback) {
   async.parallel([
     function(callback) {
       User.findOne({username: username},
-        'username fullName email countryId phone balanceACB BTCWallet ETHAddr',
+        'username fullName email countryId phone balanceACB BTCWallet',
         callback,
       );
     },
@@ -148,7 +127,6 @@ UserSchema.statics.getInfo = function(username, callback) {
       var user = JSON.parse(JSON.stringify(res[0]));
       user.balanceACB = formatter.balance(user.balanceACB);
       user.balanceBTC = formatter.balance(res[1].balanceBTC);
-      user.balanceETH = formatter.balance(res[1].balanceETH);
       callback(null, user);
     }
   })

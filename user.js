@@ -25,16 +25,6 @@ function CreateBTCWallet(name, callback) {
   });
 };
 
-function CreateETHAddr(name, callback) {
-  var ethapi = new bcypher('eth','main','d1033f8d51664cd2a1d7e3735cf07f8c');
-  var data = {
-    token: 'd1033f8d51664cd2a1d7e3735cf07f8c',
-    name: name,
-    address: null,
-  };
-  ethapi.genAddr(data, callback);
-};
-
 // TODO refactor: move function to User model
 
 router.post('/create-user', function(req, res, next) {
@@ -82,15 +72,6 @@ router.post('/create-user', function(req, res, next) {
               function(callback) {
                 CreateBTCWallet(body.username, callback);
               },
-              function(callback) {
-                CreateETHAddr(body.username, function(err, res) {
-                  if (err) callback(err);
-                  else {
-                    res.token = "d1033f8d51664cd2a1d7e3735cf07f8c";
-                    callback(null, res);
-                  }
-                });
-              },
             ], function(err, res) {
               if (err) next(err);
               User.create({
@@ -105,7 +86,6 @@ router.post('/create-user', function(req, res, next) {
                 token: randToken.generate(64),
                 level: referer.length,
                 BTCWallet: res[0],
-                ETHAddr: res[1],
               }, function(err) {
                 if (err) next(err);
                 else callback();
