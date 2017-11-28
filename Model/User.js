@@ -78,7 +78,6 @@ UserSchema.statics.addACB = function(username, amount, rate, callback) {
         return res;
       });
       // TODO check if update is success
-      // TODO only update if amount > 0
       async.each(addList, function(x, cb) {
         if (x.amount > 0) {
           User.update({username: x.username},

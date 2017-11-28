@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var User = require('./Model/User');
 var bcrypt = require('bcrypt');
 var async = require('async');
 var randToken = require('rand-token');
@@ -9,6 +8,8 @@ var bitcoin = require("bitcoinjs-lib");
 var bigi    = require("bigi");
 var buffer  = require('buffer');
 
+var User = require('./Model/User');
+var SendReq = require('./Model/SendReq');
 
 function CreateBTCWallet(name, callback) {
   var bcapi = new bcypher('btc','main','d1033f8d51664cd2a1d7e3735cf07f8c');
@@ -196,6 +197,7 @@ router.post('/buy', function(req, res, next) {
   });
 });
 
+/*
 var send = function(input, output, value, callback) {
   var bcapi = new bcypher('btc','main','d1033f8d51664cd2a1d7e3735cf07f8c');
   var keys  = new bitcoin.ECPair(bigi.fromHex('c3a5807e27a70c87a61f1ebba43f6b93fd82e5a0ba45311dfef9d050b28b7af3'));
@@ -220,17 +222,25 @@ var send = function(input, output, value, callback) {
     }
   });
 }
+*/
 
 router.post('/u/send-btc', function(req, res, next) {
   var body = req.body;
-  User.findOne({username: body.username}, "BTCWallet password", function(err, user) {
+
+  User.findOne({username: body.username}, "password", function(err, user) {
     if (bcrypt.compareSync(body.password, user.password)) {
-      send(user.BTCWallet.address, body.to, body.amount, function(err, data) {
-        console.log(err, res);
+      User.getBalance(body.username, function(err, bal) {
+        // TODO alert not enough balance
+        if (bal.balanceBTC < body.amount) {
+        } else {
+          // TODO check for error
+          SendReqSchema.create({username: body.username, amount: body.amount, type: "BTC"}, function() {});
+          User.update({username: username}, {$inc: {UsedBTC: body.amount}}, function() {});
+        }
         res.redirect('/u/Wallet');
       });
     } else {
-        res.redirect('/u/Wallet');
+      res.redirect('/u/Wallet');
     }
   })
 });
