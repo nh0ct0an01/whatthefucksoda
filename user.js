@@ -160,7 +160,7 @@ router.post('/u/change-password', function(req, res, next) {
   });
 });
 
-router.post('/buy', function(req, res, next) {
+router.post('/u/buy', function(req, res, next) {
   var body = req.body;
   User.addACB(body.username, parseFloat(body.amount), parseFloat(body.rate), function(err) {
     if (err) next(err);
